@@ -4,6 +4,9 @@ const mongoose= require('mongoose')
 
 const Schema= mongoose.Schema
 
+// Backend-Session-8
+const bcrypt= require('bcrypt')
+
 const userSchema= new Schema ({
     firstName:{
         type:String,
@@ -38,39 +41,68 @@ const userSchema= new Schema ({
     password:{
         type:String,
         required:[true,'Password is required'],
+        trim:true,
+        minLength:8
 
     },
     passwordConfirm:{
          type:String,
-         required:[true,'Password confirm is required'],
+         trim:true,
+         minLength:8
     },
+    passwordChangedAt: Date,
     role:{
         type:String,
         enum: ['admin', 'userClient' , 'inventoryController','dispatcher', 'warehouseManager','warehouseOperator','driver'],
-        required:[true,'Rolee is required']
+        required:[true,'Role is required']
 
     },
-    userClient:{
-        company:{
+
+    company:{
             type: Schema.Types.ObjectId,
             ref:"Company"
-        }
-    },
-    warehouseManager:{
-        company:{
-            type: Schema.Types.ObjectId,
-            ref:"Company"
-        }
-    },
-    warehouseOperator:{
-        company:{
-            type: Schema.Types.ObjectId,
-            ref:"Company"
-        }
-    }
+        },
+     isActive:{
+        type:Boolean,
+        default:true
+     }
+     
     
     
 },{timestamps:true})
+
+//Backend-Session-8
+//automatic, pre-save middleware, runs whn saving to db , create() or save(),not update functions, before document is saved to db
+userSchema.pre('save', async function(){
+    try{
+        if(!this.isModified("password")){
+            //ismodified() return true if field is modified
+            return }
+            //continue to next task
+            //saving without password change
+
+            //multiple rounds of hashing , saves hashing discovreing in reverse engineering
+            //bcrypt is async, so we use await
+            this.password= await bcrypt.hash(this.password,12)
+            //don't save passwordconfirm , just for frontend
+            this.passwordConfirm=undefined
+
+      
+    
+ } catch(err){console.log(err)}
+
+}
+)
+
+//mathods: static function to call 
+userSchema.methods.checkPassword= async function(candidatePassword
+    //coming from frontend
+    ,userPassword //hashed saved password in db
+)
+{
+    //string plain password , encrypted password, order in compare()
+    return await bcrypt.compare(candidatePassword,userPassword)
+}
 
 module.exports= mongoose.model("User",userSchema)
 

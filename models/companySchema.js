@@ -50,10 +50,11 @@ const companySchema= new Schema ({
     },
     type:{
         type:String,
-        enum:['warehouse','userClient']
+        enum:['warehouse','userClient'],
+        required:[true,"Company's type is required"]
     },
 
-    userClient:{
+  
         userClientCompanyType:{
             type:String,
             enum:['retailers','pharma-distributors','electronics-importer']
@@ -65,8 +66,12 @@ const companySchema= new Schema ({
         contractStartDate:{
             type:Date,
             default:Date.now
-        }
+        
     }
+    ,  isActive:{
+        type:Boolean,
+        default:true
+     }
     
     
 },{timestamps:true})

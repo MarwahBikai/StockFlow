@@ -16,6 +16,10 @@ app.use(express.json())
  //Backend-Session-4
 //built-in, open http port
 //every request/response are sent to/from this port, must be valid/not taken, 0-1023 are reserved for known services in the os, servers on same port will fail with EADDINUS error
+
+//Backend-Session-11
+const userRouter =require('./routers/userRouter')
+app.use('/api/users',userRouter)
 app.listen(3000,
      //Backend-Session-4
     //execute once successfull port server running

@@ -19,11 +19,13 @@ const productSchema= new Schema ({
     },
     company:{
         type:Schema.Types.ObjectId,
-        ref:"company"
+        ref:"company",
+        requird:[true,'Company is required']
     },
     currentWarehouse:{
         type:Schema.Types.ObjectId,
-        ref:"company"
+        ref:"company",
+        requird:[true,'warehouse is required']
     },
     stock:{
         type:number,
@@ -58,8 +60,8 @@ const productSchema= new Schema ({
        
     },
     dimensions:{
-        type:String,
-        dimension:{
+      
+       
             length:{
                 type:number,
             },
@@ -72,7 +74,7 @@ const productSchema= new Schema ({
             dimensionUnit:{
                 type:String,
                 enum:['cm','inch']
-            }
+            
         }
     },
     barCode:{
