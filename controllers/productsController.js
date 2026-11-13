@@ -178,8 +178,7 @@ exports.editProduct= async(req,res)=>{
      
          return res.status(200).json({
             success:true,
-            message:"Product is succssfully updated",
-            data: product})
+            message:"Product is succssfully updated"})
  
         }catch(err){
              return res.status(500).json({

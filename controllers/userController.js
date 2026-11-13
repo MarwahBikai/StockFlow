@@ -380,8 +380,7 @@ exports.editUser= async(req,res)=>{
 
         return res.status(200).json({
             success:true,
-            data:
-            user
+        message:"User edited successfully"
         })
 
     }catch(err){
@@ -417,8 +416,7 @@ exports.deactivateUser=async(req,res)=>{
 
          return res.status(200).json({
             success:true,
-            data:
-            user
+           message:"User deactivated successfully"
         })
     }catch(err){
         return res.status(500).json({

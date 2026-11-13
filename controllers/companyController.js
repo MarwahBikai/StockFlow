@@ -38,10 +38,10 @@ exports.createclientCompany= async(req,res)=>{
         role:'admin'
        })  
        if(!admin)
-        // else than admin you do not hav accss to create a user
+        // else than admin you do not have access to create a user 
          return res.status(401).json({
         success:false,
-        message:"Admin account is not found"})
+        message:"Your account is not authorized to do this action"})
 
           if( !req.body.name || !req.body.email || !req.body.phoneNumber || !req.body.country || !req.body.city || !req.body.address || !req.body.type)
             return res.status(400).json({
@@ -98,7 +98,7 @@ exports.editCompany= async(req,res)=>{
         const company= await Company.findOne({
         _id: req.body.id
        })  
-       if(!user)
+       if(!company)
         // else than admin you do not hav accss to create a user
          return res.status(404).json({
         success:false,
@@ -107,6 +107,7 @@ exports.editCompany= async(req,res)=>{
 
         let fieldsToUpdate={}
 
+      
         if (req.body.name)
           fieldsToUpdate.name= req.body.name
          if (req.body.email)
@@ -142,8 +143,7 @@ exports.editCompany= async(req,res)=>{
 
         return res.status(200).json({
             success:true,
-            data:
-            company
+            message:"company edited successfully"
         })
 
     }catch(err){
@@ -180,8 +180,7 @@ exports.deactivateCompany=async(req,res)=>{
 
          return res.status(200).json({
             success:true,
-            data:
-            company
+             message:"Company deactivated successfully"
         })
     }catch(err){
          return res.status(500).json({
