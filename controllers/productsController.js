@@ -6,11 +6,12 @@ const Company= require('../models/companySchema')
 
 //client users and admin
 
+//Client Users and Admin can create and edit products
 exports.createProduct= async(req,res)=>{
     try{
         // Backend-Session-7 
         //findOne({filtering fields})=> gets one document 
-
+     
         const user= await User.findOne({
             _id: req.user.id,
             role:'clientCompany' || 'admin'
@@ -18,7 +19,7 @@ exports.createProduct= async(req,res)=>{
         if(!user) // if user is not of roles admin or clientcompany, don't allow=> unauthorized action
             return res.status(401).json({
              success:false,
-            message:"Only client company user and admin can create product should be signed up"})
+            message:"Only registered client company user and admin can create product should be signed up"})
 
         // if user client check if user client works in company
         const clientCompanyId= user.company.toString()
@@ -48,6 +49,8 @@ exports.createProduct= async(req,res)=>{
         success:false,
         message:"Missing required Fields!"})
 
+        //backend session 7
+        //create a new product document, through create() and give fields to save to this document
         const product= await Product.create({
             name:req.body.name,
             company:req.body.company,
@@ -57,12 +60,14 @@ exports.createProduct= async(req,res)=>{
             category:req.body.category,
         })
     
+        // return response with status of 201=> created and success field of true, message and new data saved to db
          return res.status(201).json({
             success:true,
             message:"Product is succssfully created",
             data: product})
  
         }catch(err){
+            //500 error in server side
              return res.status(500).json({
              success:false,
              message:err.message})
@@ -70,8 +75,10 @@ exports.createProduct= async(req,res)=>{
         }
 }
 
+//Client Users and Admin can create and edit products
 exports.editProduct= async(req,res)=>{
     try{
+        //make sure user is authorized and is in db
         const user= await User.findOne({
             _id: req.user.id,
             role:'clientCompany' || 'admin'
@@ -79,7 +86,7 @@ exports.editProduct= async(req,res)=>{
         if(!user)
             return res.status(401).json({
              success:false,
-            message:"Only client company user and admin can create product and should be signed up"})
+            message:"Only registered client company user and admin can create product and should be signed up"})
 
         // if user client check if user client works in company
         const clientCompanyId= user.company.toString()
@@ -88,6 +95,7 @@ exports.editProduct= async(req,res)=>{
             _id: clientCompanyId
         })
 
+        //company is not in db
         if(!companyExists){
   return res.status(404).json({
              success:false,
@@ -99,11 +107,14 @@ exports.editProduct= async(req,res)=>{
             _id:req.body.id
         })
     
+        //404 not found status
+        //backend session 7
         if (!product)
                return res.status(404).json({
              success:false,
             message:"product cannot be found"})
 
+            //client belongs to only on company,so we can allow only the client to edit product owned by his/her company
                if(clientCompanyID !== product.company)
              return res.status(401).json({
              success:false,
@@ -114,6 +125,7 @@ exports.editProduct= async(req,res)=>{
             let fieldsToUpdate={}
   
 
+            //if not empty in request body then add to fields to update to the selected document
         if(req.body.SKU)
             fieldsToUpdate.SKU= req.body.SKU
 
@@ -148,6 +160,7 @@ exports.editProduct= async(req,res)=>{
             fieldsToUpdate.barCode=req.body.barCode
         
             //Backend-Session-7
+            //update one is an async function ,needing to wait for the res by await keyword, returns a promise
             await product.updateOne(fieldsToUpdate)
      
          return res.status(200).json({
