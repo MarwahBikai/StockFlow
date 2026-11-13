@@ -14,14 +14,26 @@ exports.createProduct= async(req,res)=>{
      
         const user= await User.findOne({
             _id: req.user.id,
-            role:'clientCompany' || 'admin'
+            role:{
+                $in:['admin','userClient']
+            }
         })
         if(!user) // if user is not of roles admin or clientcompany, don't allow=> unauthorized action
             return res.status(401).json({
              success:false,
             message:"Only registered client company user and admin can create product should be signed up"})
 
-        // if user client check if user client works in company
+// if user is client user, he/she should have a company to add product referencing it, else , cannot do it
+
+        if( user.role ==='userClient' && !user.company){
+               return res.status(400).json({
+             success:false,
+            message:"user should have a company to add it's products, assign company and try again"})
+        }
+        
+        
+       if( user.role ==='userClient' && user.company){
+
         const clientCompanyId= user.company.toString()
 
         //checking if company is in db/ collection Company 
@@ -36,15 +48,16 @@ exports.createProduct= async(req,res)=>{
              success:false,
             message:"This company is not found or is not active"})
         }
-        if(clientCompanyID !== user.body.companyID)
+        if(clientCompanyId !== req.body.company.toString())
              return res.status(401).json({
              success:false,
             message:"Client company user create product for his/her own company"})
     
-
+             }
+            
             //Backend-Session-7
             //MAKE SURE REQUIRED FIELDS ARE NOT EMPTY
-            if( !req.body.name || !req.body.company || !req.body.currentWarehouse || !req.body.stock || !req.body.SKU )
+            if( !req.body.name || !req.body.company || !req.body.category || !req.body.currentWarehouse || !req.body.stock || !req.body.SKU )
             return res.status(400).json({
         success:false,
         message:"Missing required Fields!"})
