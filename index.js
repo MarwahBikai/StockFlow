@@ -19,7 +19,17 @@ app.use(express.json())
 
 //Backend-Session-11
 const userRouter =require('./routers/userRouter')
+const companyRouter =require('./routers/companyRouter')
+const productRouter =require('./routers/productRouter')
+
+//let this express app instance use this router
+//Backend-Session-11
 app.use('/api/users',userRouter)
+
+app.use('/api/companies',companyRouter)
+
+app.use('/api/products',productRouter)
+
 app.listen(3000,
      //Backend-Session-4
     //execute once successfull port server running
