@@ -21,7 +21,7 @@ exports.getClientCompanies= async(req,res)=>{
         message:"Admin account is not found"})
     
     const clientCompanies= await Company.find({})
-    return res.status.json({
+    return res.status(200).json({
         success:true,
         data:clientCompanies
     })}
@@ -72,7 +72,7 @@ exports.createclientCompany= async(req,res)=>{
             success:true,
             message:"Company created successfully",
             data:
-            newUser
+            newCompany
         })
 
     }catch(err){
@@ -95,7 +95,7 @@ exports.editCompany= async(req,res)=>{
         success:false,
         message:"Admin account is not found"})
 
-        const company= await User.findOne({
+        const company= await Company.findOne({
         _id: req.body.id
        })  
        if(!user)
