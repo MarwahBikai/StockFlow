@@ -33,6 +33,7 @@ exports.createProduct= async(req,res)=>{
             message:"user should have a company to add it's products, assign company and try again"})
         }
         
+        //if user is client user ,check company if she/he works in company (only one company)
         else if( user.role ==='userClient' && user.company){
 
 
