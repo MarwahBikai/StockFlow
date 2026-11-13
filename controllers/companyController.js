@@ -10,8 +10,15 @@ const User= require('../models/userSchema')
 exports.getClientCompanies= async(req,res)=>{
 
     try{
-    if(req.user.role !== 'admin')
-       return res.status(403).json({message:"You are not authorized to view users"}) 
+      const admin= await User.findOne({
+        _id: req.user.id,
+        role:'admin'
+       })  
+       if(!admin)
+        // else than admin you do not hav accss to create a user
+         return res.status(401).json({
+        success:false,
+        message:"Admin account is not found"})
     
     const clientCompanies= await Company.find({})
     return res.status.json({
