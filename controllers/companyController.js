@@ -174,8 +174,9 @@ exports.deactivateCompany=async(req,res)=>{
         success:false,
         message:"company is not found"})
         
-        company.isActive=false
-        company.save()
+        //Backend-session-7
+        //update and set isActive to false
+        await company.updateOne({isActive:false})
 
          return res.status(200).json({
             success:true,
