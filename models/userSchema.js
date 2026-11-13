@@ -73,11 +73,11 @@ const userSchema= new Schema ({
 
 //Backend-Session-8
 //automatic, pre-save middleware, runs whn saving to db , create() or save(),not update functions, before document is saved to db
-userSchema.pre('save', async function(){
+userSchema.pre('save', async function(next){
     try{
         if(!this.isModified("password")){
             //ismodified() return true if field is modified
-            return }
+            return next() }
             //continue to next task
             //saving without password change
 

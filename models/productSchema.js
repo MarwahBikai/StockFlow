@@ -28,7 +28,7 @@ const productSchema= new Schema ({
         requird:[true,'warehouse is required']
     },
     stock:{
-        type:number,
+        type:Number,
         min:1,
       required:[true,'stock is required'],
 
@@ -56,20 +56,20 @@ const productSchema= new Schema ({
         enum:['pcs','kg','L','packets'],
     }
     ,weight:{
-        type:number,
+        type:Number,
        
     },
     dimensions:{
       
        
             length:{
-                type:number,
+                type:Number,
             },
             width:{
-                type:number
+                type:Number
             },
             height:{
-                type:number
+                type:Number
             },
             dimensionUnit:{
                 type:String,
@@ -97,7 +97,7 @@ const productSchema= new Schema ({
             enum:['receive','move', 'reserve', 'pick', 'dispatch', 'adjust']
           },
           quantity:{
-            type:number,
+            type:Number,
             required:[true,'quantity is required']
           },
           generatedAt:{
