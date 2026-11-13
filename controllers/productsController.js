@@ -25,30 +25,31 @@ exports.createProduct= async(req,res)=>{
 
 // if user is client user, he/she should have a company to add product referencing it, else , cannot do it
 
-        if( user.role ==='userClient' && !user.company){
+     
+
+       if( user.role ==='userClient' && !user.company){
                return res.status(400).json({
              success:false,
             message:"user should have a company to add it's products, assign company and try again"})
         }
         
-        
-       if( user.role ==='userClient' && user.company){
+        else if( user.role ==='userClient' && user.company){
 
-        const clientCompanyId= user.company.toString()
 
         //checking if company is in db/ collection Company 
         //(maybe got deleted)
-        const companyExists= await Company.findOne({
-            _id: clientCompanyId,
-            isActive:true
-        })
+        let companyExists= await Company.findOne({
+            _id: req.body.company
+        }
+    )
+    console.log(companyExists)
 
         if(!companyExists){
   return res.status(404).json({
              success:false,
-            message:"This company is not found or is not active"})
+            message:"This company is not found"})
         }
-        if(clientCompanyId !== req.body.company.toString())
+        if(user.company !== req.body.company.toString())
              return res.status(401).json({
              success:false,
             message:"Client company user create product for his/her own company"})
