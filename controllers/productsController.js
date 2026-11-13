@@ -8,11 +8,14 @@ const Company= require('../models/companySchema')
 
 exports.createProduct= async(req,res)=>{
     try{
+        // Backend-Session-7 
+        //findOne({filtering fields})=> gets one document 
+
         const user= await User.findOne({
             _id: req.user.id,
             role:'clientCompany' || 'admin'
         })
-        if(!user)
+        if(!user) // if user is not of roles admin or clientcompany, don't allow=> unauthorized action
             return res.status(401).json({
              success:false,
             message:"Only client company user and admin can create product should be signed up"})
@@ -20,14 +23,17 @@ exports.createProduct= async(req,res)=>{
         // if user client check if user client works in company
         const clientCompanyId= user.company.toString()
 
+        //checking if company is in db/ collection Company 
+        //(maybe got deleted)
         const companyExists= await Company.findOne({
-            _id: clientCompanyId
+            _id: clientCompanyId,
+            isActive:true
         })
 
         if(!companyExists){
   return res.status(404).json({
              success:false,
-            message:"Cannot find company"})
+            message:"This company is not found or is not active"})
         }
         if(clientCompanyID !== user.body.companyID)
              return res.status(401).json({

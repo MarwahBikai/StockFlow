@@ -161,7 +161,7 @@ exports.deactivateCompany=async(req,res)=>{
         role:'admin'
        })  
        if(!admin)
-        // else than admin you do not hav accss to create a user
+        // else than admin you do not have access to create a user
          return res.status(401).json({
         success:false,
         message:"Admin account is not found"})
@@ -170,7 +170,6 @@ exports.deactivateCompany=async(req,res)=>{
         _id: req.body.id
        })  
        if(!company)
-        // else than admin you do not hav accss to create a user
          return res.status(404).json({
         success:false,
         message:"company is not found"})
